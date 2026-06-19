@@ -199,4 +199,3 @@ DROP TABLE truck_telemetry;
 confluent kafka topic delete truck_telemetry
 docker stop $(docker ps -q --filter ancestor=shadowtraffic/shadowtraffic:1.14.1)
 ```
-# ai-day-confluent-hackathon
