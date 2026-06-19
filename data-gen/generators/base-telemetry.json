@@ -1,0 +1,252 @@
+{
+    "connection": "truck-telemetry",
+    "topic": "truck_telemetry",
+    "varsOnce": {
+        "startingTime": {
+            "_gen": "now"
+        },
+        "steadyStateMean": {
+            "_gen": "uniformDistribution",
+            "bounds": [1500, 3000]
+        }
+    },
+    "vars": {
+        "steadyStateThrottle": {
+            "_gen": "normalDistribution",
+            "mean": {
+                "_gen": "var",
+                "var": "steadyStateMean"
+            },
+            "sd": 400,
+            "clamp": [800, 5000],
+            "decimals": 0
+        },
+        "reading_id_value": {
+            "_gen": "math",
+            "expr": "200000000 + ((ts % 100000) * 1000) + rand",
+            "names": {
+                "ts": {
+                    "_gen": "var",
+                    "var": "delta",
+                    "path": ["ts"]
+                },
+                "rand": {
+                    "_gen": "uniformDistribution",
+                    "bounds": [0, 9999],
+                    "decimals": 0
+                }
+            },
+            "decimals": 0
+        },
+        "elapsed_minutes": {
+            "_gen": "math",
+            "expr": "max(0, (ts - start) / 60000)",
+            "names": {
+                "ts": {
+                    "_gen": "var",
+                    "var": "delta",
+                    "path": ["ts"]
+                },
+                "start": {
+                    "_gen": "var",
+                    "var": "startingTime"
+                }
+            },
+            "decimals": 4
+        }
+    },
+    "key": {
+        "_gen": "var",
+        "var": "forkKey"
+    },
+    "value": {
+        "reading_id": {
+            "_gen": "string",
+            "expr": "TLM-#{id}",
+            "names": {
+                "id": {
+                    "_gen": "var",
+                    "var": "reading_id_value"
+                }
+            }
+        },
+        "truck_id": {
+            "_gen": "var",
+            "var": "forkKey"
+        },
+        "engine_temp_c": {
+            "_gen": "math",
+            "expr": "88.0 + drift_rate * elapsed + noise",
+            "names": {
+                "drift_rate": {
+                    "_gen": "var",
+                    "var": "egtDriftRate"
+                },
+                "elapsed": {
+                    "_gen": "var",
+                    "var": "elapsed_minutes"
+                },
+                "noise": {
+                    "_gen": "normalDistribution",
+                    "mean": 0,
+                    "sd": 1.2
+                }
+            },
+            "decimals": 2
+        },
+        "oil_pressure_psi": {
+            "_gen": "math",
+            "expr": "52.0 + drift_rate * elapsed + noise",
+            "names": {
+                "drift_rate": {
+                    "_gen": "var",
+                    "var": "oilDriftRate"
+                },
+                "elapsed": {
+                    "_gen": "var",
+                    "var": "elapsed_minutes"
+                },
+                "noise": {
+                    "_gen": "normalDistribution",
+                    "mean": 0,
+                    "sd": 0.8
+                }
+            },
+            "decimals": 2
+        },
+        "vibration_g": {
+            "_gen": "math",
+            "expr": "0.32 + drift_rate * elapsed + noise",
+            "names": {
+                "drift_rate": {
+                    "_gen": "var",
+                    "var": "vibrationDriftRate"
+                },
+                "elapsed": {
+                    "_gen": "var",
+                    "var": "elapsed_minutes"
+                },
+                "noise": {
+                    "_gen": "normalDistribution",
+                    "mean": 0,
+                    "sd": 0.04
+                }
+            },
+            "decimals": 4
+        },
+        "tire_psi_avg": {
+            "_gen": "math",
+            "expr": "102.0 + drift_rate * elapsed + noise",
+            "names": {
+                "drift_rate": {
+                    "_gen": "var",
+                    "var": "tireDriftRate"
+                },
+                "elapsed": {
+                    "_gen": "var",
+                    "var": "elapsed_minutes"
+                },
+                "noise": {
+                    "_gen": "normalDistribution",
+                    "mean": 0,
+                    "sd": 0.6
+                }
+            },
+            "decimals": 2
+        },
+        "brake_pad_mm": {
+            "_gen": "math",
+            "expr": "13.0 + drift_rate * elapsed + noise",
+            "names": {
+                "drift_rate": {
+                    "_gen": "var",
+                    "var": "brakeDriftRate"
+                },
+                "elapsed": {
+                    "_gen": "var",
+                    "var": "elapsed_minutes"
+                },
+                "noise": {
+                    "_gen": "normalDistribution",
+                    "mean": 0,
+                    "sd": 0.05
+                }
+            },
+            "decimals": 2
+        },
+        "fuel_efficiency_mpg": {
+            "_gen": "math",
+            "expr": "7.2 + drift_rate * elapsed + noise",
+            "names": {
+                "drift_rate": {
+                    "_gen": "var",
+                    "var": "fuelDriftRate"
+                },
+                "elapsed": {
+                    "_gen": "var",
+                    "var": "elapsed_minutes"
+                },
+                "noise": {
+                    "_gen": "normalDistribution",
+                    "mean": 0,
+                    "sd": 0.25
+                }
+            },
+            "decimals": 2
+        },
+        "rpm": {
+            "_gen": "normalDistribution",
+            "mean": 1600,
+            "sd": 200,
+            "clamp": [800, 2400],
+            "decimals": 0
+        },
+        "speed_mph": {
+            "_gen": "normalDistribution",
+            "mean": 58,
+            "sd": 8,
+            "clamp": [0, 75],
+            "decimals": 1
+        },
+        "ambient_temp_c": {
+            "_gen": "normalDistribution",
+            "mean": 24,
+            "sd": 5,
+            "clamp": [-5, 42],
+            "decimals": 1
+        },
+        "reading_ts": {
+            "_gen": "var",
+            "var": "delta",
+            "path": ["ts"]
+        }
+    },
+    "localConfigs": {
+        "throttleMs": {
+            "_gen": "var",
+            "var": "delta",
+            "path": ["throttle"]
+        },
+        "avroSchemaHint": {
+            "value": {
+                "type": "record",
+                "name": "truck_telemetry_value",
+                "namespace": "org.apache.flink.avro.generated.record",
+                "fields": [
+                    {"name": "reading_id", "type": "string"},
+                    {"name": "truck_id", "type": "string"},
+                    {"name": "engine_temp_c", "type": "double"},
+                    {"name": "oil_pressure_psi", "type": "double"},
+                    {"name": "vibration_g", "type": "double"},
+                    {"name": "tire_psi_avg", "type": "double"},
+                    {"name": "brake_pad_mm", "type": "double"},
+                    {"name": "fuel_efficiency_mpg", "type": "double"},
+                    {"name": "rpm", "type": "int"},
+                    {"name": "speed_mph", "type": "double"},
+                    {"name": "ambient_temp_c", "type": "double"},
+                    {"name": "reading_ts", "type": {"type": "long", "logicalType": "timestamp-millis"}}
+                ]
+            }
+        }
+    }
+}

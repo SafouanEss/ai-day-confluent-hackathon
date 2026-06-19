@@ -1,0 +1,34 @@
+{
+    "generators": [
+        {
+            "_gen": "loadJsonFile",
+            "files": [
+                "/home/generators/base-telemetry.json",
+                "/home/generators/healthy-telemetry.json"
+            ]
+        },
+        {
+            "_gen": "loadJsonFile",
+            "files": [
+                "/home/generators/base-telemetry.json",
+                "/home/generators/degrading-telemetry.json"
+            ]
+        }
+    ],
+    "schedule": {
+        "stages": [
+            {
+                "generators": ["healthy", "degrading"]
+            }
+        ]
+    },
+    "connections": {
+        "truck-telemetry": {
+            "_gen": "loadJsonFile",
+            "file": "/home/connections/truck-telemetry.json"
+        }
+    },
+    "globalConfigs": {
+        "maxMs": 600000
+    }
+}

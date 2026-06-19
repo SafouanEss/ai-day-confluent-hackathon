@@ -1,0 +1,12 @@
+# Terraform state (contains secrets)
+*.tfstate
+*.tfstate.*
+.terraform/
+
+# Virtual environment
+.venv/
+
+# Credentials & environment
+.env
+*.env
+!data-gen/*.env.example

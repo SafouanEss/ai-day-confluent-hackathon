@@ -1,0 +1,69 @@
+{
+    "name": "degrading",
+    "fork": {
+        "key": {
+            "_gen": "loadJsonFile",
+            "file": "/home/trucks/degrading-trucks.json"
+        }
+    },
+    "vars": {
+        "egtDriftRate": {
+            "_gen": "constant",
+            "x": 2.5
+        },
+        "oilDriftRate": {
+            "_gen": "constant",
+            "x": -1.5
+        },
+        "vibrationDriftRate": {
+            "_gen": "constant",
+            "x": 0.045
+        },
+        "tireDriftRate": {
+            "_gen": "constant",
+            "x": -0.7
+        },
+        "brakeDriftRate": {
+            "_gen": "constant",
+            "x": -0.04
+        },
+        "fuelDriftRate": {
+            "_gen": "constant",
+            "x": -0.18
+        },
+        "delta": {
+            "_gen": "customFunction",
+            "language": "python",
+            "file": "/home/functions/advance_time.py",
+            "function": "advance_time",
+            "args": {
+                "startingTime": {
+                    "_gen": "var",
+                    "var": "startingTime"
+                },
+                "now": {
+                    "_gen": "math",
+                    "expr": "timestamp + offset",
+                    "names": {
+                        "timestamp": {
+                            "_gen": "now"
+                        },
+                        "offset": {
+                            "_gen": "constant",
+                            "x": 0
+                        }
+                    }
+                },
+                "historicalDelta": {
+                    "_gen": "var",
+                    "var": "steadyStateThrottle"
+                },
+                "realtimeDelta": {
+                    "_gen": "normalDistribution",
+                    "mean": 1500,
+                    "sd": 200
+                }
+            }
+        }
+    }
+}

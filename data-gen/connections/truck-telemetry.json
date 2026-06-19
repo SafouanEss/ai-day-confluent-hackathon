@@ -1,0 +1,14 @@
+{
+    "kind": "kafka",
+    "producerConfigs": {
+        "bootstrap.servers": "${KAFKA_BOOTSTRAP_SERVERS}",
+        "security.protocol": "SASL_SSL",
+        "sasl.mechanism": "PLAIN",
+        "sasl.jaas.config": "org.apache.kafka.common.security.plain.PlainLoginModule required username='${KAFKA_API_KEY}' password='${KAFKA_API_SECRET}';",
+        "key.serializer": "io.shadowtraffic.kafka.serdes.StringSerializer",
+        "value.serializer": "io.confluent.kafka.serializers.KafkaAvroSerializer",
+        "schema.registry.url": "${SCHEMA_REGISTRY_URL}",
+        "basic.auth.credentials.source": "USER_INFO",
+        "basic.auth.user.info": "${SCHEMA_REGISTRY_API_KEY}:${SCHEMA_REGISTRY_API_SECRET}"
+    }
+}
