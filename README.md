@@ -69,7 +69,7 @@ That gives you:
 
 You'll also need:
 
-- **Docker** + a [ShadowTraffic free-trial license](https://shadowtraffic.io) at `data-gen/free-trial-license-docker.env`
+- **Docker**
 - Kafka and Schema Registry credentials exported as env vars (see step 1 below)
 
 ## Project layout
