@@ -11,6 +11,10 @@ The pipeline exercises every Flink AI primitive in the hackathon rubric:
 | **Flink AI Model Inference** | `ML_PREDICT` against `llm_textgen_model` to produce structured diagnoses (severity + likely_cause + recommended_action) |
 | **Streaming Agents** | `CREATE TOOL`, `CREATE AGENT`, `AI_RUN_AGENT` against an MCP server for autonomous shop dispatch via `http_get` / `http_post` |
 
+## Project Lineage
+
+![Project Lineage](project-lineage-confluent.png)
+
 ## The pipeline
 
 ```
